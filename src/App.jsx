@@ -14,11 +14,13 @@ export default function App() {
   // Derived Values
   const letterArray = currentWord.split("");
   const alphabetArray = alphabet.split("");
+  const wrongGuessCount = guessedLetter.filter(letter => !currentWord.includes(letter)).length;
 
-  const languageElements = languages.map((lan) => {
+
+  const languageElements = languages.map((lan, index) => {
     return(
       <span 
-        className="chip-element"
+        className={`chip-element ${index < wrongGuessCount ? "lost" : ""}`}
         key={lan.name}
         style={{backgroundColor: lan.backgroundColor, color: lan.color}}>
           {lan.name}

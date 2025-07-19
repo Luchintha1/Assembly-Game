@@ -127,3 +127,24 @@ button.new-game {
 .alphabet-button-wrong{
   background-color: #EC5D49;
 }
+
+span.chip-element.lost::before {
+    content: "💀";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    z-index: 1
+}
+
+.chip-element.lost {
+  position: relative;
+  z-index: 0;
+}
