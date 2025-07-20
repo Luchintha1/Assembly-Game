@@ -31,22 +31,30 @@ header > p1{
 
 .status-bar{
   color: #F9F4DA;
-  background-color: #10A95B;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-block: 30px;
   border-radius: 5px;
+  min-height: 80px;
 }
 
-.status-bar > h2{
+.status-bar-won{
+  background-color: #10A95B;
+}
+
+.status-bar-lost{
+  background-color: #BA2A2A;
+}
+
+.status-bar-won > h2, .status-bar-lost > h2{
   font-size: 1.4rem;
   font-weight: 600;
-  margin: 5px;
+  margin: 10px 0;
 }
 
-.status-bar > p{
-  margin: 5px;
+.status-bar-won > h2, .status-bar-lost > p{
+  margin: 15px 0px;
 }
 
 .chip-section{
