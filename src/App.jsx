@@ -1,6 +1,7 @@
 import { languages } from "./languages.js";
 import React from "react"
 import clsx from "clsx";
+import { getFarewellText } from "../utils.js";
 
 export default function App() {
 
@@ -15,6 +16,7 @@ export default function App() {
   const letterArray = currentWord.split("");
   const alphabetArray = alphabet.split("");
   const wrongGuessCount = guessedLetter.filter(letter => !currentWord.includes(letter)).length;
+  const isGuessedLastCorrect = currentWord.includes(guessedLetter[guessedLetter.length - 1]);
 
   const languageElements = languages.map((lan, index) => {
     return(
@@ -41,6 +43,13 @@ export default function App() {
     )
   })
 
+  function letterClicked(letter){
+    setGuessedLetter(prevState => 
+      prevState.includes(letter) ? 
+      [...prevState] : 
+      [...prevState, letter]);
+  }
+
   const alphabetElements = alphabetArray.map((letter, index) => {
     return(
       <button
@@ -58,15 +67,18 @@ export default function App() {
     )
   })
 
-  function letterClicked(letter){
-    setGuessedLetter(prevState => 
-      prevState.includes(letter) ? 
-      [...prevState] : 
-      [...prevState, letter]);
-  }
-
   function renderGameStates(){
-    if(!isGameOver){
+    if((!isGameOver && !isGuessedLastCorrect) && guessedLetter.length > 0){
+      return(
+        <>
+          <h2>{getFarewellText(languages[wrongGuessCount - 1].name)}</h2>
+        </>
+      )
+    }
+    else if(!isGameOver && isGuessedLastCorrect){
+      return null;
+    }
+    else if(!isGameOver){
       return null;
     }
 
@@ -86,6 +98,17 @@ export default function App() {
     }
   }
 
+  function classNaming(){
+    if(isGameOver){
+      if(isGameWon) {return "status-bar status-bar-won"}
+      else{"status-bar status-bar-lost"}
+
+    }else{
+      if(!isGuessedLastCorrect && guessedLetter.length > 0){return "status-bar status-bar-wrong"}
+      else{return "status-bar"}
+    }
+  }
+
   return (
     <>
       <header>
@@ -93,11 +116,7 @@ export default function App() {
         <p>Guess the word in under 8 attempts to keep the 
           programming world safe from Assembly</p>
         <section className=
-        { 
-          isGameWon ? "status-bar status-bar-won" : isGameLost ? 
-          "status-bar status-bar-lost" : 
-          "status-bar"
-          }>
+        {classNaming()}>
           {renderGameStates()}
         </section>
       </header>
