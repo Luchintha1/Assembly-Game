@@ -2,6 +2,7 @@ import { languages } from "./languages.js";
 import React from "react"
 import clsx from "clsx";
 import { getFarewellText, randomWord } from "./utils.js";
+import Confetti from 'react-confetti'
 
 export default function App() {
 
@@ -37,8 +38,11 @@ export default function App() {
     return(
       <span
         key={index}
-        className="letter">
-        {guessedLetter.includes(letter) ? letter.toUpperCase() : ""}
+        className={guessedLetter.includes(letter) ? "letter" : "letter missed-letter"}>
+        {!isGameLost ? 
+        (guessedLetter.includes(letter) ? 
+        letter.toUpperCase() : "") : 
+        (letter.toUpperCase())}
       </span>
     )
   })
@@ -112,6 +116,11 @@ export default function App() {
     }
   }
 
+  function restartTheGame(){
+    setCurrentWord(randomWord());
+    setGuessedLetter([]);
+  }
+
   return (
     <>
       <header>
@@ -154,7 +163,8 @@ export default function App() {
       <section className="keyboard">
         {alphabetElements}
       </section>
-      {isGameOver &&<button className="new-game">New Game</button>}
+      {isGameOver &&<button className="new-game" onClick={() => restartTheGame()}>New Game</button>}
+      {isGameWon && <Confetti recycle={false} numberOfPieces={1000}/>}
     </>
   )
 }

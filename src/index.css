@@ -96,6 +96,10 @@ header > p1{
   justify-content: center;
 }
 
+.missed-letter{
+  color: #EC5D49;
+}
+
 .keyboard{
   display: flex;
   flex-wrap: wrap;
