@@ -1,12 +1,12 @@
 import { languages } from "./languages.js";
 import React from "react"
 import clsx from "clsx";
-import { getFarewellText } from "../utils.js";
+import { getFarewellText, randomWord } from "./utils.js";
 
 export default function App() {
 
   // States
-  const [currentWord, setCurrentWord] = React.useState("react");
+  const [currentWord, setCurrentWord] = React.useState(() => randomWord());
   const [guessedLetter, setGuessedLetter] = React.useState([]);
 
   // Static Values
@@ -61,6 +61,9 @@ export default function App() {
           "alphabet-button-correct" : 
           "alphabet-button-wrong"
         ))}
+        disabled={isGameOver}
+        aria-disabled={guessedLetter.includes(letter)}
+        aria-label={`Letter ${letter}`}
         >
           {letter.toUpperCase()}
         </button>
@@ -101,7 +104,7 @@ export default function App() {
   function classNaming(){
     if(isGameOver){
       if(isGameWon) {return "status-bar status-bar-won"}
-      else{"status-bar status-bar-lost"}
+      else{return "status-bar status-bar-lost"}
 
     }else{
       if(!isGuessedLastCorrect && guessedLetter.length > 0){return "status-bar status-bar-wrong"}
@@ -115,8 +118,11 @@ export default function App() {
         <h1>Assembly: Endgame</h1>
         <p>Guess the word in under 8 attempts to keep the 
           programming world safe from Assembly</p>
-        <section className=
-        {classNaming()}>
+
+        <section 
+        aria-live="polite" 
+        role="status" 
+        className={classNaming()}>
           {renderGameStates()}
         </section>
       </header>
@@ -126,6 +132,25 @@ export default function App() {
       <section className="letter-section">
         {letterElements}
       </section>
+
+      {/*This section is not rendered into the screen. This is to increase the accessibility */}
+      <section
+        className="sr-only" 
+        aria-live="polite" 
+        role="status"
+      >
+        <p>
+            {currentWord.includes(guessedLetter[guessedLetter.length - 1]) ? 
+                `Correct! The letter ${guessedLetter[guessedLetter.length - 1]} is in the word.` : 
+                `Sorry, the letter ${guessedLetter[guessedLetter.length - 1]} is not in the word.`
+            }
+            You have {languages.length - 1} attempts left.
+        </p>
+        <p>Current word: {currentWord.split("").map(letter => 
+        guessedLetter.includes(letter) ? letter + "." : "blank.")
+        .join(" ")}</p>
+      </section>
+
       <section className="keyboard">
         {alphabetElements}
       </section>
